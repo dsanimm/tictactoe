@@ -6,7 +6,7 @@ public class TicTacToe {
 	private static final Scanner sc = new Scanner(System.in);
 	static char choice;
 
-	private static char[] userChoice(char[] board) {
+	private static char[] userChoice(char[] board, int coin) {
 		if (choice != 'X' && choice != 'O') {
 			System.out.println("Choose X or O");
 			choice = sc.next().charAt(0);
@@ -14,7 +14,7 @@ public class TicTacToe {
 		System.out.println("Choose position");
 		int pos = sc.nextInt();
 		if (board[pos] == ' ')
-			board = TicTacToe.choiceBoard(board, choice, pos);
+			board = TicTacToe.choiceBoard(board, choice, pos, coin);
 		else
 			System.out.println("Wrong Choice");
 		return board;
@@ -27,8 +27,9 @@ public class TicTacToe {
 		return board;
 	}
 
-	private static char[] choiceBoard(char[] board, char choice, int pos) {
-		board[pos] = choice;
+	private static char[] choiceBoard(char[] board, char choice, int pos, int coin) {
+		if (coin == 1)
+			board[pos] = choice;
 		int posComputer = (int) (9 * (Math.random())) + 1;
 		while (board[posComputer] != ' ' && !checkDraw(board)) {
 			posComputer = (int) (9 * (Math.random())) + 1;
@@ -37,6 +38,8 @@ public class TicTacToe {
 		if (board[posComputer] == ' ') {
 			board[posComputer] = compLetter;
 		}
+		if (coin == 0)
+			board[pos] = choice;
 		return board;
 	}
 
@@ -112,31 +115,33 @@ public class TicTacToe {
 		char[] board = TicTacToe.createBoard();
 		printBoard(board);
 		System.out.println("choose heads or tails");
-		String coin =sc.next();
-		int randToss = (int) (2*Math.random());
-		int coinwin=0;
-		if (coin=="head" && randToss==0)
-			{System.out.println("heads. Player plays first");
-			coinwin=1;}
-		else if(coin=="tail" && randToss==0) {
+		String coin = sc.next();
+		int randToss = (int) (2 * Math.random());
+		int coinwin = 0;
+		System.out.println(randToss);
+		if (coin.equals("head") && randToss == 0) {
+			System.out.println("heads. Player plays first");
+			coinwin = 1;
+		} else if (coin.equals("tail") && randToss == 0) {
 			System.out.println("heads. Computer plays first");
-		coinwin = 0;}
-			else if(coin=="tail" && randToss==1)
-			{System.out.println("tails. Player plays first");
-		coinwin = 1;}
-			else if(coin=="head" && randToss==1)
-			{System.out.println("tails. Computer plays first");
-			coinwin = 0;}
-		
-		while (!checkWin(board) && !checkDraw(board) && coinwin==1) {
-			
-			choice ='X';
-			board = TicTacToe.userChoice(board);
+			coinwin = 0;
+		} else if (coin.equals("tail") && randToss == 1) {
+			System.out.println("tails. Player plays first");
+			coinwin = 1;
+		} else if (coin.equals("head") && randToss == 1) {
+			System.out.println("tails. Computer plays first");
+			coinwin = 0;
+		}
+
+		while (!checkWin(board) && !checkDraw(board) && coinwin == 1) {
+
+			choice = 'X';
+			board = TicTacToe.userChoice(board, coinwin);
 			printBoard(board);
 		}
-		while (!checkWin(board) && !checkDraw(board) && coinwin==0) {
-			choice='O';
-			board = TicTacToe.userChoice(board);
+		while (!checkWin(board) && !checkDraw(board) && coinwin == 0) {
+			choice = 'O';
+			board = TicTacToe.userChoice(board, coinwin);
 			printBoard(board);
 		}
 		if (checkDraw(board))
