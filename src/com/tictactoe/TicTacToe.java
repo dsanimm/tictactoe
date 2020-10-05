@@ -3,6 +3,19 @@ package com.tictactoe;
 import java.util.Scanner;
 
 public class TicTacToe {
+	static Scanner sc = new Scanner(System.in);
+
+	private static char[] userChoice(char[] board) {
+		System.out.println("Choose X or O");
+		char choice = sc.next().charAt(0);
+		System.out.println("Choose position for X or O");
+		int pos = sc.nextInt();
+		if (board[pos] == ' ')
+			board = TicTacToe.choiceBoard(board, choice, pos);
+		else
+			System.out.println("Wrong Choice");
+		return board;
+	}
 
 	private static char[] createBoard() {
 		char board[] = new char[11];
@@ -14,6 +27,9 @@ public class TicTacToe {
 	private static char[] choiceBoard(char[] board, char choice, int pos) {
 		board[pos] = choice;
 		int posComputer = (int) (10 * (Math.random())) + 1;
+		while (posComputer != ' ') {
+			posComputer = (int) (10 * (Math.random())) + 1;
+		}
 		char compLetter = (choice == 'O') ? 'X' : 'O';
 		if (board[posComputer] == ' ') {
 			board[posComputer] = compLetter;
@@ -21,15 +37,24 @@ public class TicTacToe {
 		return board;
 	}
 
+	private static void printBoard(char[] board) {
+		for (int i = 1; i < 10; i++) {
+			System.out.print("[" + board[i] + "]");
+			if (i % 3 == 0) {
+				System.out.println();
+				System.out.println("---------");
+			}
+		}
+	}
+
 	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
+
 		TicTacToe obj = new TicTacToe();
-		char[] board = obj.createBoard();
-		System.out.println("Choose X or O");
-		char choice = sc.next().charAt(0);
-		System.out.println("Choose position for X or O");
-		int pos = sc.nextInt();
-		board = obj.choiceBoard(board, choice, pos);
+		TicTacToe.createBoard();
+		char[] board = TicTacToe.createBoard();
+		TicTacToe.printBoard(board);
+		board = TicTacToe.userChoice(board);
+		TicTacToe.printBoard(board);
 
 	}
 
